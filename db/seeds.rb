@@ -802,28 +802,45 @@ if seed_demo_data
 
   sponsor_tier_data = [
     {
-      key: :community,
+      key: :partners,
       name: "Parteneri educaționali",
       name_en: "Educational partners",
-      position: 10
+      position: 10,
+      previous_names: []
     },
     {
-      key: :main,
-      name: "Sponsori principali",
-      name_en: "Main sponsors",
-      position: 20
+      key: :gold,
+      name: "Sponsori Gold",
+      name_en: "Gold sponsors",
+      position: 20,
+      previous_names: ["Sponsori principali"]
     },
     {
-      key: :supporters,
-      name: "Susținători",
-      name_en: "Supporters",
-      position: 30
+      key: :silver,
+      name: "Sponsori Silver",
+      name_en: "Silver sponsors",
+      position: 30,
+      previous_names: ["Susținători"]
     }
   ]
 
+  Sponsor.where(
+    title: [
+      "Atelierul Pixel",
+      "Laboratorul Verde",
+      "Norul Demo",
+      "Fabrica de Roboți",
+      "Studio Exemplu",
+      "Rețeaua Curioasă"
+    ]
+  ).destroy_all
+
   sponsor_tiers = sponsor_tier_data.to_h do |data|
-    tier = SponsorTier.find_or_initialize_by(name: data[:name])
+    tier = SponsorTier
+      .where(name: [data[:name], *data[:previous_names]])
+      .first_or_initialize
     tier.assign_attributes(
+      name: data[:name],
       name_en: data[:name_en],
       position: data[:position]
     )
@@ -833,40 +850,123 @@ if seed_demo_data
 
   sponsor_data = [
     {
-      title: "Atelierul Pixel",
-      tier: :community,
+      title: "Ministerul Educației",
+      website_url: "https://www.edu.ro/",
+      tier: :partners,
       position: 10,
-      color: "#4fba3f"
+      color: "#22543d"
     },
     {
-      title: "Laboratorul Verde",
-      tier: :community,
+      title: "Uniunea Profesorilor de Informatică din România",
+      website_url: "https://upir.ro/",
+      tier: :partners,
       position: 20,
       color: "#22543d"
     },
     {
-      title: "Norul Demo",
-      tier: :main,
+      title: "Consiliul Județean Vrancea",
+      website_url: "https://cjvrancea.ro/",
+      tier: :partners,
+      position: 30,
+      color: "#22543d"
+    },
+    {
+      title: "Universitatea Națională de Știință și Tehnologie POLITEHNICA București",
+      website_url: "https://upb.ro/",
+      tier: :partners,
+      position: 40,
+      color: "#22543d"
+    },
+    {
+      title: "Universitatea de Vest din Timișoara",
+      website_url: "https://uvt.ro/",
+      tier: :partners,
+      position: 50,
+      color: "#22543d"
+    },
+    {
+      title: "Viva Credit",
+      website_url: "https://vivacredit.ro/",
+      tier: :gold,
       position: 10,
-      color: "#009ac7"
+      color: "#d69e2e"
     },
     {
-      title: "Fabrica de Roboți",
-      tier: :main,
+      title: "Bitdefender",
+      website_url: "https://bitdefender.com/",
+      tier: :gold,
       position: 20,
-      color: "#ed9f2d"
+      color: "#d69e2e"
     },
     {
-      title: "Studio Exemplu",
-      tier: :supporters,
+      title: "Orange",
+      website_url: "https://orange.ro/",
+      tier: :gold,
+      position: 30,
+      color: "#d69e2e"
+    },
+    {
+      title: "Cisco",
+      website_url: "https://cisco.com/",
+      tier: :gold,
+      position: 40,
+      color: "#d69e2e"
+    },
+    {
+      title: "Intuitext",
+      website_url: "https://www.intuitext.ro/",
+      tier: :gold,
+      position: 50,
+      color: "#d69e2e"
+    },
+    {
+      title: "Leonte",
+      website_url: "https://leonte.ro/",
+      tier: :silver,
       position: 10,
-      color: "#df4c73"
+      color: "#718096"
     },
     {
-      title: "Rețeaua Curioasă",
-      tier: :supporters,
+      title: "Easyhost",
+      website_url: "https://ro.easyhost.com/",
+      tier: :silver,
       position: 20,
-      color: "#58647a"
+      color: "#718096"
+    },
+    {
+      title: "InfoBits Academy",
+      website_url: "https://ebooks.infobits.ro/",
+      tier: :silver,
+      position: 30,
+      color: "#718096"
+    },
+    {
+      title: "Sindicatul Liber din Învățământ Vrancea",
+      website_url: "https://slivrancea.blogspot.com/",
+      tier: :silver,
+      position: 40,
+      color: "#718096"
+    },
+    {
+      title: "CyberEDU",
+      website_url: "https://www.cyber-edu.co/",
+      tier: :silver,
+      position: 50,
+      color: "#718096"
+    },
+    {
+      title: "Micromet",
+      website_url: "https://www.micromet.ro/",
+      tier: :silver,
+      position: 60,
+      color: "#718096"
+    },
+    {
+      title: "Electric SRL",
+      website_url: "https://www.electricsrl.ro/",
+      tier: :silver,
+      position: 70,
+      color: "#718096"
     }
   ]
 
@@ -874,16 +974,22 @@ if seed_demo_data
     output = Tempfile.new(["infoedu-sponsor-logo", ".png"])
     output.close
 
+    initials = title
+      .scan(/\p{L}+/)
+      .filter_map { |word| word.first&.upcase }
+      .first(4)
+      .join
+
     MiniMagick::Tool.new("magick") do |magick|
       magick.size "600x240"
       magick.xc color
       magick.fill "rgba(255,255,255,0.20)"
-      magick.draw "circle 92,120 140,120"
+      magick.draw "circle 300,120 395,120"
       magick.fill "white"
       magick.font "DejaVu-Sans-Bold"
       magick.gravity "center"
-      magick.pointsize "40"
-      magick.draw "text 55,0 '#{title}'"
+      magick.pointsize "76"
+      magick.draw "text 0,0 '#{initials}'"
       magick << output.path
     end
 
@@ -896,7 +1002,7 @@ if seed_demo_data
     sponsor = Sponsor.find_or_initialize_by(title: data[:title])
     sponsor.assign_attributes(
       sponsor_tier: sponsor_tiers.fetch(data[:tier]),
-      website_url: "https://example.test/partners/#{data[:title].parameterize}",
+      website_url: data[:website_url],
       position: data[:position],
       active: true
     )
