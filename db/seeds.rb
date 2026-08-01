@@ -1097,7 +1097,7 @@ if seed_demo_data
     end
   end
 
-  # About-page copy and category artwork currently published by infoeducatie.ro.
+  # About-page copy currently published by infoeducatie.ro.
   # It remains a permanent page; a future blog can reuse the same rich-text editor
   # and media library without coupling static navigation content to dated posts.
   about_page = ContentPage.find_or_initialize_by(slug: "about")
@@ -1116,50 +1116,8 @@ if seed_demo_data
     "content_pages",
     "about"
   )
-  about_attachments = {}
-
-  {
-    web: "about-web.png",
-    robots: "about-robots.png",
-    media: "about-media.png",
-    educational: "about-educational.png",
-    utility: "about-utility.png"
-  }.each do |key, filename|
-    picture = Ckeditor::Picture.find_by(
-      assetable: about_page,
-      data_file_name: filename
-    )
-
-    unless picture
-      File.open(about_asset_directory.join("images", filename)) do |file|
-        picture = Ckeditor::Picture.create!(data: file, assetable: about_page)
-      end
-    end
-
-    attachment = {
-      contentType: "image",
-      height: picture.height,
-      url: picture.url_content,
-      width: picture.width
-    }.compact
-    encoded_attachment = ERB::Util.html_escape(attachment.to_json)
-    about_attachments[key] = <<~HTML.squish
-      <figure data-trix-attachment="#{encoded_attachment}"
-        data-trix-content-type="image"
-        class="attachment attachment--preview"><img
-        src="#{picture.url_content}"
-        width="#{picture.width}"
-        height="#{picture.height}"><figcaption
-        class="attachment__caption"></figcaption></figure>
-    HTML
-  end
-
   render_about_body = lambda do |locale|
-    body = about_asset_directory.join("body.#{locale}.html").read
-    about_attachments.each do |key, attachment|
-      body = body.gsub("{{#{key}_attachment}}", attachment)
-    end
-    body
+    about_asset_directory.join("body.#{locale}.html").read
   end
 
   about_page.update!(
