@@ -142,6 +142,95 @@ if seed_demo_data
     }
   ]
 
+  participant_groups = [
+    {
+      members: [[:eco_atlas_daria, "Daria", "Demo"], [:eco_atlas_luca, "Luca", "Verde"]],
+      school_name: "Colegiul Verde Demonstrativ",
+      county: "Judet Demo Sud",
+      city: "Verdegrad",
+      mentor_first_name: "Irina",
+      mentor_last_name: "Ghid"
+    },
+    {
+      members: [[:logic_lab, "Andrei", "Logic"]],
+      school_name: "Liceul Fictiv Central",
+      county: "Judet Mostra",
+      city: "Mostreni",
+      mentor_first_name: "Sorin",
+      mentor_last_name: "Model"
+    },
+    {
+      members: [[:soundscapes_ilinca, "Ilinca", "Cadru"], [:soundscapes_matei, "Matei", "Pixel"]],
+      school_name: "Liceul Creativ Demo",
+      county: "Judet Scena",
+      city: "Cadropolis",
+      mentor_first_name: "Oana",
+      mentor_last_name: "Studio"
+    },
+    {
+      members: [[:paper_shadow, "Eva", "Scena"]],
+      school_name: "Academia Vizuala Exemplu",
+      county: "Judet Lumina",
+      city: "Luminis",
+      mentor_first_name: "Calin",
+      mentor_last_name: "Regizor"
+    },
+    {
+      members: [[:seed_rover_rares, "Rares", "Motor"], [:seed_rover_cora, "Cora", "Senzor"]],
+      school_name: "Colegiul Tehnic Demo",
+      county: "Judet Mecanic",
+      city: "Rotoria",
+      mentor_first_name: "Vlad",
+      mentor_last_name: "Atelier"
+    },
+    {
+      members: [[:aqua_sentinel, "Denis", "Circuit"]],
+      school_name: "Liceul Experimental Local",
+      county: "Judet Delta Demo",
+      city: "Aquapolis",
+      mentor_first_name: "Diana",
+      mentor_last_name: "Prototip"
+    },
+    {
+      members: [[:study_compass_bianca, "Bianca", "Plan"], [:study_compass_paul, "Paul", "Orar"]],
+      school_name: "Colegiul Orizont Fictiv",
+      county: "Judet Orizont",
+      city: "Planesti",
+      mentor_first_name: "Ioan",
+      mentor_last_name: "Organizator"
+    },
+    {
+      members: [[:safe_notes, "Miruna", "Cheie"]],
+      school_name: "Liceul Digital Mostra",
+      county: "Judet Cheie",
+      city: "Criptograd",
+      mentor_first_name: "Alina",
+      mentor_last_name: "Model"
+    },
+    {
+      members: [[:civic_pulse_daria, "Daria", "Retea"], [:civic_pulse_mihai, "Mihai", "Portal"]],
+      school_name: "Academia Civica Demo",
+      county: "Judet Agora",
+      city: "Agora Noua",
+      mentor_first_name: "Mihnea",
+      mentor_last_name: "Web"
+    },
+    {
+      members: [[:museum_mapper, "Lia", "Harta"]],
+      school_name: "Colegiul Patrimoniu Exemplu",
+      county: "Judet Muzeu",
+      city: "Galeria",
+      mentor_first_name: "Sabina",
+      mentor_last_name: "Curator"
+    }
+  ]
+
+  participant_groups.each do |group|
+    group.fetch(:members).each do |key, first_name, last_name|
+      participant_data << group.except(:members).merge(key:, first_name:, last_name:)
+    end
+  end
+
   contestants = participant_data.each_with_index.to_h do |data, index|
     user = seed_user.call(
       email: "participant-#{data[:key]}@example.test",
@@ -249,6 +338,114 @@ if seed_demo_data
       prize: "I"
     }
   ]
+
+  additional_projects = [
+    {
+      title: "Eco Atlas",
+      category: "educational",
+      contestant_keys: [:eco_atlas_daria, :eco_atlas_luca],
+      description: "Atlas educational fictiv cu misiuni despre ecosisteme si consum responsabil.",
+      homepage: "https://eco-atlas.example.test",
+      score: 69.5,
+      extra_score: 17.0,
+      prize: "II"
+    },
+    {
+      title: "Logic Lab",
+      category: "educational",
+      contestant_keys: [:logic_lab],
+      description: "Laborator fictiv de puzzle-uri care explica algoritmi prin experimente scurte.",
+      score: 64.0,
+      extra_score: 15.5,
+      prize: "III"
+    },
+    {
+      title: "Soundscapes",
+      category: "multimedia",
+      contestant_keys: [:soundscapes_ilinca, :soundscapes_matei],
+      description: "Experienta multimedia fictiva despre sunetele unui oras imaginar pe durata unei zile.",
+      homepage: "https://soundscapes.example.test",
+      score: 67.75,
+      extra_score: 18.0,
+      prize: "II"
+    },
+    {
+      title: "Paper Shadow",
+      category: "multimedia",
+      contestant_keys: [:paper_shadow],
+      description: "Animatie fictiva din decoruri de hartie despre curaj si colaborare.",
+      score: 62.5,
+      extra_score: 14.0,
+      prize: "III"
+    },
+    {
+      title: "Seed Rover",
+      category: "roboti",
+      contestant_keys: [:seed_rover_rares, :seed_rover_cora],
+      description: "Robot fictiv care monitorizeaza rasaduri si simuleaza udarea selectiva.",
+      score: 71.25,
+      extra_score: 15.0,
+      prize: "II"
+    },
+    {
+      title: "Aqua Sentinel",
+      category: "roboti",
+      contestant_keys: [:aqua_sentinel],
+      description: "Prototip fictiv pentru observarea parametrilor apei intr-un bazin demonstrativ.",
+      score: 65.5,
+      extra_score: 13.5,
+      prize: "III"
+    },
+    {
+      title: "Study Compass",
+      category: "utilitar",
+      contestant_keys: [:study_compass_bianca, :study_compass_paul],
+      description: "Organizator fictiv pentru teme, sesiuni de studiu si obiective saptamanale.",
+      homepage: "https://study-compass.example.test",
+      score: 68.0,
+      extra_score: 16.25,
+      prize: "II"
+    },
+    {
+      title: "Safe Notes",
+      category: "utilitar",
+      contestant_keys: [:safe_notes],
+      description: "Carnet fictiv pentru notite locale organizate si protejate cu o parola demonstrativa.",
+      score: 63.75,
+      extra_score: 14.5,
+      prize: "III"
+    },
+    {
+      title: "Civic Pulse",
+      category: "web",
+      contestant_keys: [:civic_pulse_daria, :civic_pulse_mihai],
+      description: "Portal civic fictiv pentru propuneri locale, sondaje si urmarirea ideilor comunitatii.",
+      homepage: "https://civic-pulse.example.test",
+      score: 72.0,
+      extra_score: 18.5,
+      prize: "II"
+    },
+    {
+      title: "Museum Mapper",
+      category: "web",
+      contestant_keys: [:museum_mapper],
+      description: "Ghid web fictiv pentru explorarea exponatelor si construirea unor tururi tematice.",
+      homepage: "https://museum-mapper.example.test",
+      score: 66.25,
+      extra_score: 15.75,
+      prize: "III"
+    }
+  ]
+
+  project_data.concat(additional_projects.map do |data|
+    slug = data.fetch(:title).parameterize
+    {
+      technical_description: "Proiect demonstrativ pentru verificarea fluxurilor locale de participanti si rezultate.",
+      system_requirements: "Browser modern sau mediu local de test.",
+      source_url: "https://example.test/projects/#{slug}",
+      homepage: nil
+    }.merge(data)
+  end)
 
   project_data.each do |data|
     project = Project.find_or_initialize_by(
