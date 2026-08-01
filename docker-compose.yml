@@ -31,6 +31,7 @@ services:
       SEED_DEMO_DATA: "true"
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:-local-compose-secret-key-base}
       SESSION_COOKIE_SECURE: "false"
+      UI_URL: ${UI_URL:-http://localhost:3001}
     command: sh -c "bundle exec rails db:prepare && bundle exec rails db:seed && bundle exec puma -C config/puma.rb"
     depends_on:
       db:

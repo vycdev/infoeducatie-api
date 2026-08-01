@@ -112,7 +112,7 @@ RailsAdmin.config do |config|
 
   config.navigation_static_label = "External tools"
   config.navigation_static_links = {
-    "InfoEducație website" => "https://infoeducatie.ro",
+    "InfoEducație website" => Settings.ui.url,
     "Community admin" => "https://community.infoeducatie.ro/admin",
     "InfoEducație support" => "https://infoeducatie.zendesk.com/",
     "Ping support" => "https://ping.zendesk.com"
