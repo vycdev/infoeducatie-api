@@ -8,25 +8,25 @@ end
 end
 
 current_edition = Edition.find_or_initialize_by(
-  name: "2026 Olimpiada Națională de Inovare și Creație digitală"
+  name: "InfoEducație Demo 2026"
 )
 current_edition.assign_attributes(
   year: 2026,
-  camp_start_date: Date.new(2026, 7, 28),
-  camp_end_date: Date.new(2026, 7, 31),
-  motto: "Noi construim meseriile viitorului",
-  registration_start_date: DateTime.new(2026, 6, 25, 0, 0, 0),
-  registration_end_date: DateTime.new(2026, 7, 22, 0, 0, 0),
+  camp_start_date: Date.new(2026, 7, 20),
+  camp_end_date: Date.new(2026, 7, 24),
+  motto: "Construim idei, testăm viitorul",
+  registration_start_date: DateTime.new(2026, 6, 1, 0, 0, 0),
+  registration_end_date: DateTime.new(2026, 6, 30, 0, 0, 0),
   travel_data_deadline: nil,
   published: true,
   current: true,
   show_results: true,
-  projects_forum_category: "77",
-  talks_forum_category: "78"
+  projects_forum_category: "demo-2026-projects",
+  talks_forum_category: "demo-2026-talks"
 )
 current_edition.save!
 
-admin_email = ENV.fetch("ADMIN_EMAIL", "admin@infoeducatie.ro")
+admin_email = ENV.fetch("ADMIN_EMAIL", "admin@example.test")
 admin_password = ENV["ADMIN_PASSWORD"]
 
 if admin_password.present? && !User.exists?(email: admin_email)
@@ -34,19 +34,17 @@ if admin_password.present? && !User.exists?(email: admin_email)
     email: admin_email,
     password: admin_password,
     password_confirmation: admin_password,
-    first_name: "Super",
-    last_name: "Admin"
+    first_name: "Demo",
+    last_name: "Administrator"
   )
   user.skip_confirmation!
   user.save!
   user.roles << Role.find_by!(name: "admin")
 end
 
-# The public-data snapshot below gives local UI development realistic content
-# without copying private registration data. Public names, schools, results and
-# biographies were captured from https://api.infoeducatie.ro/v1 on 2026-08-01.
-# All email addresses, identity fields, addresses, phone numbers and birth dates
-# are deliberately fake.
+# This entirely fictional dataset gives local UI development realistic content
+# without copying production or personal data. Names, schools, projects,
+# results, biographies, URLs and all private registration fields are invented.
 seed_demo_data = ActiveModel::Type::Boolean.new.cast(
   ENV.fetch("SEED_DEMO_DATA", Rails.env.development?)
 )
@@ -73,74 +71,74 @@ if seed_demo_data
 
   participant_data = [
     {
-      key: :finedu,
-      first_name: "Alexandru Radu",
-      last_name: "Circiumaru",
-      school_name: "Liceul Teoretic \"Alexandru Ioan Cuza\"",
-      county: "București",
-      city: "București",
-      mentor_first_name: "Valentina",
-      mentor_last_name: "Chirita"
+      key: :budget_quest,
+      first_name: "Mara",
+      last_name: "Demo",
+      school_name: "Liceul Demonstrativ Nord",
+      county: "Județ Demo Nord",
+      city: "Oraș Demo",
+      mentor_first_name: "Elena",
+      mentor_last_name: "Mentor"
     },
     {
-      key: :dual_pulse,
-      first_name: "Daria",
-      last_name: "Laza",
-      school_name: "Colegiul Național „Samuil Vulcan”",
-      county: "Bihor",
-      city: "Beiuș",
-      mentor_first_name: "Claudia",
-      mentor_last_name: "Buran"
+      key: :parallel_dreams,
+      first_name: "Tudor",
+      last_name: "Exemplu",
+      school_name: "Colegiul Exemplu",
+      county: "Județ Exemplu",
+      city: "Exempluville",
+      mentor_first_name: "Dan",
+      mentor_last_name: "Profesor"
     },
     {
-      key: :neurogrip_matei,
-      first_name: "Matei Petru",
-      last_name: "Ruță",
-      school_name: "Colegiul Național Grigore Moisil",
-      county: "București",
-      city: "București",
-      mentor_first_name: "Mihaela",
-      mentor_last_name: "Garabet"
+      key: :flexibot_ada,
+      first_name: "Ada",
+      last_name: "Fictivă",
+      school_name: "Liceul Tehnologic Fictiv",
+      county: "Județ Demo Est",
+      city: "Municipiul Fictiv",
+      mentor_first_name: "Mira",
+      mentor_last_name: "Exemplu"
     },
     {
-      key: :neurogrip_razvan,
-      first_name: "Răzvan",
-      last_name: "Glaje",
-      school_name: "Colegiul Național Grigore Moisil",
-      county: "București",
-      city: "București",
-      mentor_first_name: "Mihaela",
-      mentor_last_name: "Garabet"
+      key: :flexibot_radu,
+      first_name: "Radu",
+      last_name: "Mostră",
+      school_name: "Liceul Tehnologic Fictiv",
+      county: "Județ Demo Est",
+      city: "Municipiul Fictiv",
+      mentor_first_name: "Mira",
+      mentor_last_name: "Exemplu"
     },
     {
-      key: :scam,
-      first_name: "Ilie",
-      last_name: "Demian",
-      school_name: "Colegiul Național „Emanuil Gojdu”",
-      county: "Bihor",
-      city: "Oradea",
-      mentor_first_name: "Tanța",
-      mentor_last_name: "Hodișan"
+      key: :pixel_vault,
+      first_name: "Ioana",
+      last_name: "Simulare",
+      school_name: "Colegiul Local de Informatică",
+      county: "Județ Local",
+      city: "Oraș Local",
+      mentor_first_name: "Teo",
+      mentor_last_name: "Ghid"
     },
     {
-      key: :synaro_cristi,
-      first_name: "Cristi",
-      last_name: "Stiegelbauer",
-      school_name: "Liceul Teoretic \"Grigore Moisil\"",
-      county: "Timiș",
-      city: "Timișoara",
-      mentor_first_name: "Luminita",
-      mentor_last_name: "Keresztes"
+      key: :code_garden_victor,
+      first_name: "Victor",
+      last_name: "Local",
+      school_name: "Academia Demo Digital",
+      county: "Județ Test",
+      city: "Testopolis",
+      mentor_first_name: "Ana",
+      mentor_last_name: "Demo"
     },
     {
-      key: :synaro_mihai,
-      first_name: "Mihai",
-      last_name: "Gorunescu",
-      school_name: "Liceul Teoretic \"Grigore Moisil\"",
-      county: "Timiș",
-      city: "Timișoara",
-      mentor_first_name: "Adriana",
-      mentor_last_name: "Simulescu"
+      key: :code_garden_sonia,
+      first_name: "Sonia",
+      last_name: "Test",
+      school_name: "Academia Demo Digital",
+      county: "Județ Test",
+      city: "Testopolis",
+      mentor_first_name: "Radu",
+      mentor_last_name: "Îndrumător"
     }
   ]
 
@@ -186,68 +184,68 @@ if seed_demo_data
 
   project_data = [
     {
-      title: "FinEdu",
+      title: "Budget Quest",
       category: "educational",
-      contestant_keys: [:finedu],
-      description: "Aplicație offline de educație financiară pentru adolescenți, cu lecții interactive, simulări și urmărirea cheltuielilor.",
-      technical_description: "Aplicație Flutter/Dart cu SQLite, Riverpod, sincronizare opțională și o suită de teste automate.",
-      system_requirements: "Telefon cu Android 6 sau mai nou; aplicația funcționează fără cont și fără conexiune la internet.",
-      source_url: "https://github.com/Circiii/FinEdu.git",
+      contestant_keys: [:budget_quest],
+      description: "Joc educațional fictiv despre administrarea unui buget lunar și luarea deciziilor financiare responsabile.",
+      technical_description: "Aplicație demonstrativă Flutter cu stocare locală și lecții definite în fișiere JSON.",
+      system_requirements: "Telefon Android demonstrativ sau emulator local.",
+      source_url: "https://example.test/projects/budget-quest",
       homepage: nil,
-      score: 67.71,
-      extra_score: 76.0,
+      score: 72.5,
+      extra_score: 18.0,
       prize: "I"
     },
     {
-      title: "Dual Pulse",
+      title: "Parallel Dreams",
       category: "multimedia",
-      contestant_keys: [:dual_pulse],
-      description: "Proiect multimedia despre un tânăr care refuză să aleagă între două vocații: arta și medicina.",
-      technical_description: "Ilustrație și animație 2D, modelare 3D, filmare și montaj realizate cu Ibis Paint X, FlipaClip, Nomad Sculpt și CapCut.",
-      system_requirements: "Player video, conexiune la internet și sistem audio.",
-      source_url: "https://www.youtube.com/watch?v=1v7-uDg38wk",
+      contestant_keys: [:parallel_dreams],
+      description: "Scurtmetraj fictiv despre două versiuni paralele ale aceluiași oraș imaginar.",
+      technical_description: "Animație 2D și montaj demonstrativ realizate cu unelte grafice locale.",
+      system_requirements: "Player video și sistem audio.",
+      source_url: "https://example.test/projects/parallel-dreams",
       homepage: nil,
-      score: 67.75,
-      extra_score: 62.63,
+      score: 70.0,
+      extra_score: 16.5,
       prize: "I"
     },
     {
-      title: "NeuroGrip",
+      title: "FlexiBot",
       category: "roboti",
-      contestant_keys: [:neurogrip_matei, :neurogrip_razvan],
-      description: "Exoschelet robotic care folosește semnale EMG pentru asistarea și reabilitarea mișcărilor degetelor.",
-      technical_description: "Sistem ESP32 cu achiziție EMG la 1 kHz, clasificare KNN, filtrare prin vot majoritar și control secvențial al servomotoarelor.",
-      system_requirements: "ESP32, senzor EMG, cinci servomotoare MG90S, senzor ACS712 și Arduino IDE.",
-      source_url: "https://github.com/RTZM09/EMG-asisted-eXoscheleton",
+      contestant_keys: [:flexibot_ada, :flexibot_radu],
+      description: "Braț robotic fictiv care sortează cuburi colorate într-un traseu demonstrativ.",
+      technical_description: "Prototip demonstrativ cu microcontroler, senzori de culoare și servomotoare.",
+      system_requirements: "Microcontroler generic, trei servomotoare și un banc local de test.",
+      source_url: "https://example.test/projects/flexibot",
       homepage: nil,
-      score: 81.43,
-      extra_score: 33.43,
+      score: 75.0,
+      extra_score: 14.25,
       prize: "I"
     },
     {
-      title: "S.C.A.M.",
+      title: "Pixel Vault",
       category: "utilitar",
-      contestant_keys: [:scam],
-      description: "Emulator NES de mare acuratețe, scris integral în Rust și disponibil inclusiv în browser.",
-      technical_description: "Emulator performant în Rust, compilat pentru web, cu implementarea componentelor hardware și a mapperelor NES.",
-      system_requirements: "Calculator fabricat în ultimii 15 ani și conexiune la internet pentru versiunea web.",
-      source_url: "https://github.com/insertokname/SCAM",
+      contestant_keys: [:pixel_vault],
+      description: "Utilitar fictiv pentru organizarea, etichetarea și arhivarea colecțiilor de imagini.",
+      technical_description: "Aplicație desktop demonstrativă cu index local și căutare după etichete.",
+      system_requirements: "Calculator cu minimum 4 GB RAM și spațiu local pentru fișiere demo.",
+      source_url: "https://example.test/projects/pixel-vault",
       homepage: nil,
-      score: 86.25,
-      extra_score: 84.75,
+      score: 73.25,
+      extra_score: 19.75,
       prize: "I"
     },
     {
-      title: "Synaro",
+      title: "Code Garden",
       category: "web",
-      contestant_keys: [:synaro_cristi, :synaro_mihai],
-      description: "Platformă web pentru dezvoltatori care transformă idei în proiecte rulabile și oferă workspaces izolate și agenți de automatizare.",
-      technical_description: "Next.js, Fastify, PostgreSQL și Docker, cu SDK TypeScript, API public, integrare MCP și teste automate.",
-      system_requirements: "Browser modern și conexiune la internet; pentru dezvoltare sunt necesare Node.js 20 și Docker.",
-      source_url: "https://github.com/mihai888nextlab/synaro",
-      homepage: "https://synaro.tech",
-      score: 78.13,
-      extra_score: 77.03,
+      contestant_keys: [:code_garden_victor, :code_garden_sonia],
+      description: "Platformă web fictivă în care elevii învață programare cultivând o grădină virtuală.",
+      technical_description: "Aplicație demonstrativă React cu API local și bază de date PostgreSQL.",
+      system_requirements: "Browser modern și conexiune la serverul local de dezvoltare.",
+      source_url: "https://example.test/projects/code-garden",
+      homepage: "https://code-garden.example.test",
+      score: 76.0,
+      extra_score: 20.0,
       prize: "I"
     }
   ]
@@ -277,20 +275,20 @@ if seed_demo_data
 
   news_articles = [
     {
-      title: "Avem ediția 2026",
+      title: "Ediția demonstrativă 2026 este pregătită",
       pinned: true,
       body: <<~HTML
-        <p><strong>Ești interesat de creație digitală? Pregătește-te pentru Olimpiadă!</strong></p>
-        <p>Motto: <em>Noi construim meseriile viitorului!</em></p>
-        <p>Etapa națională are loc la Focșani, în perioada 28–31 iulie 2026.</p>
+        <p><strong>Acesta este un articol fictiv folosit pentru dezvoltarea interfeței locale.</strong></p>
+        <p>Motto demonstrativ: <em>Construim idei, testăm viitorul!</em></p>
+        <p>Conținutul, datele și locurile din această bază de date sunt inventate.</p>
       HTML
     },
     {
-      title: "Rezultatele ediției 2026 sunt disponibile",
+      title: "Rezultatele demonstrative sunt disponibile",
       pinned: false,
       body: <<~HTML
-        <p>Rezultatele Olimpiadei Naționale de Inovare și Creație digitală 2026 au fost publicate.</p>
-        <p>Felicitări tuturor celor 211 participanți și echipelor celor 133 de proiecte înscrise!</p>
+        <p>Rezultatele fictive pentru ediția demonstrativă 2026 sunt acum vizibile în interfața locală.</p>
+        <p>Toate numele, proiectele și punctajele afișate sunt date de test inventate.</p>
       HTML
     }
   ]
@@ -305,12 +303,8 @@ if seed_demo_data
   end
 
   historical_edition_names = {
-    2000 => "2000 Națională",
-    2002 => "2002 Națională",
-    2003 => "2003 Națională",
-    2004 => "2004 Națională",
-    2007 => "2007 Națională",
-    2008 => "2008 Națională"
+    2022 => "Ediția demonstrativă 2022",
+    2024 => "Ediția demonstrativă 2024"
   }
 
   historical_editions = historical_edition_names.to_h do |year, name|
@@ -332,18 +326,18 @@ if seed_demo_data
 
   alumni_data = [
     {
-      email: "alumnus-cristian-strat@example.test",
-      first_name: "Cristian",
-      last_name: "Strat",
-      edition_years: [2000, 2002, 2003, 2004],
-      description: "InfoEducație mi-a oferit motivația să învăț tehnologii web și să dezvolt infoarena. Prezentarea este la fel de importantă ca lucrarea în sine: repetați înainte să veniți în fața comisiei."
+      email: "alumnus-alex-demo@example.test",
+      first_name: "Alex",
+      last_name: "Demo",
+      edition_years: [2022, 2024],
+      description: "Biografie fictivă: edițiile demonstrative m-au încurajat să experimentez, să colaborez și să îmi prezint ideile mai clar."
     },
     {
-      email: "alumnus-valentin-bora@example.test",
-      first_name: "Valentin",
-      last_name: "Bora",
-      edition_years: [2007, 2008],
-      description: "InfoEducație a fost un mediu în care, deși era concurs, lumea încerca să te ajute. Înveți într-o săptămână mai mult decât ți-ai putea imagina și îți dezvolți inclusiv abilitățile de prezentare."
+      email: "alumnus-mara-exemplu@example.test",
+      first_name: "Mara",
+      last_name: "Exemplu",
+      edition_years: [2024],
+      description: "Biografie fictivă: experiența demo mi-a arătat cât de mult contează feedbackul, lucrul în echipă și o prezentare bine repetată."
     }
   ]
 

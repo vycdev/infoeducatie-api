@@ -27,9 +27,9 @@ Start the application and PostgreSQL with:
 docker compose up --build
 ```
 
-The local Compose setup seeds representative public data from the 2026 edition:
-first-place projects and participants from every category, published results,
-news and alumni. Required private contestant fields use fake local-only values.
+The local Compose setup seeds an entirely fictional 2026 dataset: first-place
+projects and participants from every category, results, news and alumni. Names,
+schools, biographies, scores, URLs and required private fields are all invented.
 Set `SEED_DEMO_DATA=false` to start with only the core roles, categories and
 current edition.
 
