@@ -1,3 +1,5 @@
+require "tempfile"
+
 # Core records required by the application in every environment.
 %w[registered contestant alumni speaker teacher admin].each do |role|
   Role.find_or_create_by!(name: role)
@@ -796,5 +798,119 @@ if seed_demo_data
       historical_editions.fetch(year)
     end
     alumnus.save!
+  end
+
+  sponsor_tier_data = [
+    {
+      key: :community,
+      name: "Parteneri educaționali",
+      name_en: "Educational partners",
+      position: 10
+    },
+    {
+      key: :main,
+      name: "Sponsori principali",
+      name_en: "Main sponsors",
+      position: 20
+    },
+    {
+      key: :supporters,
+      name: "Susținători",
+      name_en: "Supporters",
+      position: 30
+    }
+  ]
+
+  sponsor_tiers = sponsor_tier_data.to_h do |data|
+    tier = SponsorTier.find_or_initialize_by(name: data[:name])
+    tier.assign_attributes(
+      name_en: data[:name_en],
+      position: data[:position]
+    )
+    tier.save!
+    [data[:key], tier]
+  end
+
+  sponsor_data = [
+    {
+      title: "Atelierul Pixel",
+      tier: :community,
+      position: 10,
+      color: "#4fba3f"
+    },
+    {
+      title: "Laboratorul Verde",
+      tier: :community,
+      position: 20,
+      color: "#22543d"
+    },
+    {
+      title: "Norul Demo",
+      tier: :main,
+      position: 10,
+      color: "#009ac7"
+    },
+    {
+      title: "Fabrica de Roboți",
+      tier: :main,
+      position: 20,
+      color: "#ed9f2d"
+    },
+    {
+      title: "Studio Exemplu",
+      tier: :supporters,
+      position: 10,
+      color: "#df4c73"
+    },
+    {
+      title: "Rețeaua Curioasă",
+      tier: :supporters,
+      position: 20,
+      color: "#58647a"
+    }
+  ]
+
+  build_sponsor_logo = lambda do |title:, color:|
+    output = Tempfile.new(["infoedu-sponsor-logo", ".png"])
+    output.close
+
+    MiniMagick::Tool.new("magick") do |magick|
+      magick.size "600x240"
+      magick.xc color
+      magick.fill "rgba(255,255,255,0.20)"
+      magick.draw "circle 92,120 140,120"
+      magick.fill "white"
+      magick.font "DejaVu-Sans-Bold"
+      magick.gravity "center"
+      magick.pointsize "40"
+      magick.draw "text 55,0 '#{title}'"
+      magick << output.path
+    end
+
+    image = MiniMagick::Image.open(output.path)
+    output.unlink
+    image
+  end
+
+  sponsor_data.each do |data|
+    sponsor = Sponsor.find_or_initialize_by(title: data[:title])
+    sponsor.assign_attributes(
+      sponsor_tier: sponsor_tiers.fetch(data[:tier]),
+      website_url: "https://example.test/partners/#{data[:title].parameterize}",
+      position: data[:position],
+      active: true
+    )
+
+    logo = build_sponsor_logo.call(title: data[:title], color: data[:color])
+    File.open(logo.path) do |file|
+      sponsor.image = ActionDispatch::Http::UploadedFile.new(
+        tempfile: file,
+        filename: "#{data[:title].parameterize}.png",
+        type: "image/png"
+      )
+      sponsor.save!
+    end
+  ensure
+    logo&.destroy!
   end
 end

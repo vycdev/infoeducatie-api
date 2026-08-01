@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_130000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_140000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -301,6 +301,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_130000) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "sponsor_tiers", force: :cascade do |t|
+    t.string   "name",                    null: false
+    t.string   "name_en"
+    t.integer  "position",   default: 0,  null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+  end
+
+  add_index "sponsor_tiers", ["name"], name: "index_sponsor_tiers_on_name", unique: true, using: :btree
+  add_index "sponsor_tiers", ["position"], name: "index_sponsor_tiers_on_position", using: :btree
+
+  create_table "sponsors", force: :cascade do |t|
+    t.string   "title",                              null: false
+    t.string   "image",                              null: false
+    t.string   "website_url"
+    t.integer  "position",          default: 0,      null: false
+    t.boolean  "active",            default: true,   null: false
+    t.bigint   "sponsor_tier_id",                    null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
+
+  add_index "sponsors", ["sponsor_tier_id", "position"], name: "index_sponsors_on_sponsor_tier_id_and_position", using: :btree
+  add_index "sponsors", ["sponsor_tier_id"], name: "index_sponsors_on_sponsor_tier_id", using: :btree
+
   create_table "talk_users", force: :cascade do |t|
     t.integer  "talk_id"
     t.integer  "user_id"
@@ -381,4 +406,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_130000) do
   add_foreign_key "robotics_turns", "robotics_competitions", on_delete: :cascade
   add_foreign_key "robotics_turns", "robotics_teams", on_delete: :restrict
   add_foreign_key "robotics_turns", "users", column: "stopped_by_id", on_delete: :nullify
+  add_foreign_key "sponsors", "sponsor_tiers"
 end

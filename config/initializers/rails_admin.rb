@@ -62,7 +62,7 @@ RailsAdmin.config do |config|
     end
     show_in_app do
       except ["ApiCredential", "RoboticsCompetition", "RoboticsTeam",
-              "RoboticsTurn", "RoboticsTimeEntry"]
+              "RoboticsTurn", "RoboticsTimeEntry", "SponsorTier", "Sponsor"]
     end
 
     approve_project do
@@ -121,7 +121,7 @@ RailsAdmin.config do |config|
   config.included_models = ["ApiCredential", "Project", "Contestant", "User", "Talk",
                             "Screenshot", "Edition", "News", "Ckeditor::Asset",
                             "Ckeditor::AttachmentFile", "Ckeditor::Picture",
-                            "Alumnus", "Teacher", "RoboticsCompetition",
+                            "Alumnus", "SponsorTier", "Sponsor", "Teacher", "RoboticsCompetition",
                             "RoboticsTeam", "RoboticsTurn",
                             "RoboticsTimeEntry"]
 
@@ -135,6 +135,8 @@ RailsAdmin.config do |config|
     "News" => ["Community", "fas fa-newspaper", 70],
     "Talk" => ["Community", "fas fa-microphone", 80],
     "Alumnus" => ["Community", "fas fa-user-check", 90],
+    "SponsorTier" => ["Website content", "fas fa-layer-group", 10],
+    "Sponsor" => ["Website content", "fas fa-handshake", 20],
     "ApiCredential" => ["Security", "fas fa-key", 100],
     "Ckeditor::Asset" => ["Editor media", "fas fa-photo-video", 110],
     "Ckeditor::AttachmentFile" => ["Editor media", "fas fa-paperclip", 120],
