@@ -16,7 +16,7 @@ class Sponsor < ActiveRecord::Base
   scope :ordered, -> { order(:position, :title) }
 
   rails_admin do
-    navigation_label "Website content"
+    navigation_label "Community"
 
     configure :image, :carrierwave
 

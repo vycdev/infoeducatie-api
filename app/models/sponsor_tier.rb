@@ -27,7 +27,7 @@ class SponsorTier < ActiveRecord::Base
   end
 
   rails_admin do
-    navigation_label "Website content"
+    navigation_label "Community"
 
     list do
       field :position
