@@ -34,7 +34,7 @@ RailsAdmin.config do |config|
     new do
       except ["ApiCredential", "RoboticsCompetition", "RoboticsTeam",
               "RoboticsTurn", "RoboticsTimeEntry", "Ckeditor::Asset",
-              "Ckeditor::AttachmentFile", "Ckeditor::Picture"]
+              "Ckeditor::AttachmentFile", "Ckeditor::Picture", "ContentPage"]
     end
     export do
       except ["ApiCredential", "Screenshot", "RoboticsCompetition",
@@ -53,12 +53,12 @@ RailsAdmin.config do |config|
     delete do
       except ["ApiCredential", "Project", "Contestant",
               "RoboticsCompetition", "RoboticsTeam", "RoboticsTurn",
-              "RoboticsTimeEntry"]
+              "RoboticsTimeEntry", "ContentPage"]
     end
     bulk_delete do
       except ["ApiCredential", "Project", "Contestant",
               "RoboticsCompetition", "RoboticsTeam", "RoboticsTurn",
-              "RoboticsTimeEntry"]
+              "RoboticsTimeEntry", "ContentPage"]
     end
     show_in_app do
       except ["ApiCredential", "RoboticsCompetition", "RoboticsTeam",

@@ -52,9 +52,6 @@ class ContentPage < ActiveRecord::Base
     end
 
     edit do
-      field :slug do
-        help "Stable public identifier. Use lowercase letters, numbers and hyphens."
-      end
       field :title do
         label "Title (Romanian)"
       end
@@ -81,9 +78,6 @@ class ContentPage < ActiveRecord::Base
         label "Document (English)"
         html_attributes accept: "application/pdf"
         help "Optional. The Romanian document is used when this is blank. PDF, up to 10 MB."
-      end
-      field :active do
-        help "Inactive pages remain in the dashboard but are hidden from the public API."
       end
     end
   end
