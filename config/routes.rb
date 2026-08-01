@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     resources :judging_criteria, only: [:index]
     resources :photo_albums, only: [:index]
     resources :content_pages, param: :slug, only: [:show]
+    resources :blog_posts, param: :slug, only: [:index, :show]
     resources :editions, only: [:index]
 
     resources :contestants, only: [:index, :show, :create] do

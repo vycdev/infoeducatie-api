@@ -1123,4 +1123,27 @@ if seed_demo_data
     title: "Contact",
     title_en: "Contact"
   )
+
+  blog_post_directory = Rails.root.join("db", "seed_assets", "blog_posts")
+  blog_post_data = JSON.parse(
+    blog_post_directory.join("data.json").read,
+    symbolize_names: true
+  )
+
+  blog_post_data.each do |post_data|
+    post = BlogPost.find_or_initialize_by(slug: post_data[:slug])
+    post.assign_attributes(
+      title: post_data[:title],
+      excerpt: post_data[:excerpt],
+      body: blog_post_directory.join(
+        post_data[:slug],
+        "body.ro.html"
+      ).read,
+      author_name: post_data[:author_name],
+      category: post_data[:category],
+      published_at: Time.zone.parse(post_data[:published_at]),
+      active: true
+    )
+    post.save!
+  end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_190000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_180000) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "blog_posts", force: :cascade do |t|
+    t.string   "slug",                              null: false
+    t.string   "title",                             null: false
+    t.string   "title_en"
+    t.text     "excerpt",                           null: false
+    t.text     "excerpt_en"
+    t.text     "body",                              null: false
+    t.text     "body_en"
+    t.string   "author_name",                       null: false
+    t.string   "category"
+    t.string   "category_en"
+    t.datetime "published_at",                      null: false
+    t.boolean  "active",        default: true,      null: false
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
+  end
+
+  add_index "blog_posts", ["active", "published_at"], name: "index_blog_posts_on_active_and_published_at", using: :btree
+  add_index "blog_posts", ["slug"], name: "index_blog_posts_on_slug", unique: true, using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"

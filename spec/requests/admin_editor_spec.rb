@@ -77,6 +77,19 @@ RSpec.describe "RailsAdmin editor", type: :request do
     end
   end
 
+  describe "GET /internal/admin/blog_post/:id/edit" do
+    it "renders localized rich-text editors for a blog post" do
+      sign_in admin
+      post = create(:blog_post)
+
+      get "/internal/admin/blog_post/#{post.id}/edit"
+
+      expect(response).to have_http_status(:ok)
+      expect(response.body.scan("<trix-editor").length).to eq(2)
+      expect(response.body).to include('/internal/admin/editor_images')
+    end
+  end
+
   def uploaded_png
     file = Tempfile.new(["editor-image", ".png"])
     (@temporary_uploads ||= []) << file
