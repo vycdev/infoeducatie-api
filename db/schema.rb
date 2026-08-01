@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_140000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_150000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,6 +132,36 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_140000) do
     t.string   "talks_forum_category"
     t.boolean  "show_results"
   end
+
+  create_table "jury_categories", force: :cascade do |t|
+    t.string   "title",                     null: false
+    t.string   "title_en",                  null: false
+    t.string   "icon"
+    t.integer  "position",  default: 0,     null: false
+    t.boolean  "active",    default: true,  null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "jury_categories", ["position"], name: "index_jury_categories_on_position", using: :btree
+  add_index "jury_categories", ["title"], name: "index_jury_categories_on_title", unique: true, using: :btree
+
+  create_table "jury_members", force: :cascade do |t|
+    t.string   "title"
+    t.string   "title_en"
+    t.string   "name",                                      null: false
+    t.string   "photo",                                     null: false
+    t.string   "occupation",                                null: false
+    t.string   "occupation_en"
+    t.integer  "position",         default: 0,              null: false
+    t.boolean  "active",           default: true,           null: false
+    t.bigint   "jury_category_id",                          null: false
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+  end
+
+  add_index "jury_members", ["jury_category_id", "position"], name: "index_jury_members_on_jury_category_id_and_position", using: :btree
+  add_index "jury_members", ["jury_category_id"], name: "index_jury_members_on_jury_category_id", using: :btree
 
   create_table "news", force: :cascade do |t|
     t.string   "title"
@@ -396,6 +426,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_140000) do
 
   add_foreign_key "api_credentials", "users", column: "created_by_id", on_delete: :nullify
   add_foreign_key "api_credentials", "users", column: "revoked_by_id", on_delete: :nullify
+  add_foreign_key "jury_members", "jury_categories"
   add_foreign_key "robotics_queue_entries", "robotics_competitions", on_delete: :cascade
   add_foreign_key "robotics_queue_entries", "robotics_teams", on_delete: :cascade
   add_foreign_key "robotics_teams", "robotics_competitions", on_delete: :cascade

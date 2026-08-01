@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     resources :talks, only: [:index]
     resources :alumni, only: [:index]
     resources :sponsors, only: [:index]
+    resources :jury, only: [:index]
     resources :editions, only: [:index]
 
     resources :contestants, only: [:index, :show, :create] do

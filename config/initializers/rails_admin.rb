@@ -62,7 +62,8 @@ RailsAdmin.config do |config|
     end
     show_in_app do
       except ["ApiCredential", "RoboticsCompetition", "RoboticsTeam",
-              "RoboticsTurn", "RoboticsTimeEntry", "SponsorTier", "Sponsor"]
+              "RoboticsTurn", "RoboticsTimeEntry", "SponsorTier", "Sponsor",
+              "JuryCategory", "JuryMember"]
     end
 
     approve_project do
@@ -121,7 +122,8 @@ RailsAdmin.config do |config|
   config.included_models = ["ApiCredential", "Project", "Contestant", "User", "Talk",
                             "Screenshot", "Edition", "News", "Ckeditor::Asset",
                             "Ckeditor::AttachmentFile", "Ckeditor::Picture",
-                            "Alumnus", "SponsorTier", "Sponsor", "Teacher", "RoboticsCompetition",
+                            "Alumnus", "SponsorTier", "Sponsor", "JuryCategory", "JuryMember",
+                            "Teacher", "RoboticsCompetition",
                             "RoboticsTeam", "RoboticsTurn",
                             "RoboticsTimeEntry"]
 
@@ -137,6 +139,8 @@ RailsAdmin.config do |config|
     "Alumnus" => ["Community", "fas fa-user-check", 90],
     "SponsorTier" => ["Community", "fas fa-layer-group", 100],
     "Sponsor" => ["Community", "fas fa-handshake", 110],
+    "JuryCategory" => ["Community", "fas fa-gavel", 120],
+    "JuryMember" => ["Community", "fas fa-user-tie", 130],
     "ApiCredential" => ["Security", "fas fa-key", 100],
     "Ckeditor::Asset" => ["Editor media", "fas fa-photo-video", 110],
     "Ckeditor::AttachmentFile" => ["Editor media", "fas fa-paperclip", 120],

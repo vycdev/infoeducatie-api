@@ -986,4 +986,49 @@ if seed_demo_data
       sponsor.save!
     end
   end
+
+  # Current jury content and images from the official infoeducatie-ui jury page.
+  jury_data = JSON.parse(
+    Rails.root.join("db", "seed_assets", "jury", "data.json").read,
+    symbolize_names: true
+  )
+  jury_icon_directory = Rails.root.join("db", "seed_assets", "jury", "icons")
+  jury_photo_directory = Rails.root.join("db", "seed_assets", "jury", "photos")
+
+  jury_data.each do |category_data|
+    category = JuryCategory.find_or_initialize_by(title: category_data[:title])
+    category.assign_attributes(
+      title_en: category_data[:title_en],
+      position: category_data[:position],
+      active: true
+    )
+
+    category.remove_icon! if category.persisted? && category.icon?
+    if category_data[:icon_filename].present?
+      File.open(jury_icon_directory.join(category_data[:icon_filename])) do |file|
+        category.icon = file
+        category.save!
+      end
+    else
+      category.save!
+    end
+
+    category_data[:members].each do |member_data|
+      member = category.jury_members.find_or_initialize_by(name: member_data[:name])
+      member.assign_attributes(
+        title: member_data[:title],
+        title_en: member_data[:title_en],
+        occupation: member_data[:occupation],
+        occupation_en: member_data[:occupation_en],
+        position: member_data[:position],
+        active: true
+      )
+
+      member.remove_photo! if member.persisted? && member.photo?
+      File.open(jury_photo_directory.join(member_data[:photo_filename])) do |file|
+        member.photo = file
+        member.save!
+      end
+    end
+  end
 end
