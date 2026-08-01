@@ -500,13 +500,16 @@ if seed_demo_data
   end
 
   historical_edition_names = {
-    2022 => "Ediția demonstrativă 2022",
-    2024 => "Ediția demonstrativă 2024"
+    2018 => "2018",
+    2020 => "2020",
+    2022 => "2022",
+    2024 => "2024"
   }
 
   historical_editions = historical_edition_names.to_h do |year, name|
-    edition = Edition.find_or_initialize_by(name: name)
+    edition = Edition.find_or_initialize_by(year: year)
     edition.assign_attributes(
+      name: name,
       year: year,
       motto: "InfoEducație #{year}",
       registration_start_date: DateTime.new(year, 1, 1),
@@ -526,6 +529,7 @@ if seed_demo_data
       email: "alumnus-alex-demo@example.test",
       first_name: "Alex",
       last_name: "Demo",
+      job: "Inginer software la Atelierul Digital",
       edition_years: [2022, 2024],
       description: "Biografie fictivă: edițiile demonstrative m-au încurajat să experimentez, să colaborez și să îmi prezint ideile mai clar."
     },
@@ -533,8 +537,73 @@ if seed_demo_data
       email: "alumnus-mara-exemplu@example.test",
       first_name: "Mara",
       last_name: "Exemplu",
+      job: "Designer de produs la Studio Mostră",
       edition_years: [2024],
       description: "Biografie fictivă: experiența demo mi-a arătat cât de mult contează feedbackul, lucrul în echipă și o prezentare bine repetată."
+    },
+    {
+      email: "alumnus-vlad-prototip@example.test",
+      first_name: "Vlad",
+      last_name: "Prototip",
+      job: "Inginer robotică la Laboratorul Local",
+      edition_years: [2018, 2020],
+      description: "Biografie fictivă: primele prototipuri construite pentru concurs mi-au transformat curiozitatea pentru senzori într-o pasiune pentru robotică."
+    },
+    {
+      email: "alumnus-ioana-pixel@example.test",
+      first_name: "Ioana",
+      last_name: "Pixel",
+      job: "Artistă tehnică la Cadru Fictiv",
+      edition_years: [2020, 2022],
+      description: "Biografie fictivă: proiectele multimedia m-au învățat să combin povestea, ilustrația și codul într-o experiență coerentă."
+    },
+    {
+      email: "alumnus-radu-circuit@example.test",
+      first_name: "Radu",
+      last_name: "Circuit",
+      job: "Dezvoltator embedded la Placa Demo",
+      edition_years: [2018],
+      description: "Biografie fictivă: feedbackul primit în tabără m-a ajutat să simplific ideile tehnice și să construiesc prototipuri mai ușor de testat."
+    },
+    {
+      email: "alumnus-elena-retea@example.test",
+      first_name: "Elena",
+      last_name: "Rețea",
+      job: "Ingineră platformă la Norul Exemplu",
+      edition_years: [2020, 2024],
+      description: "Biografie fictivă: colaborarea cu participanți din alte județe mi-a deschis drumul către sisteme distribuite și comunități tehnice."
+    },
+    {
+      email: "alumnus-tudor-harta@example.test",
+      first_name: "Tudor",
+      last_name: "Hartă",
+      job: "Cercetător UX la Busola Digitală",
+      edition_years: [2022],
+      description: "Biografie fictivă: discuțiile cu juriul m-au făcut să observ mai atent cum folosesc oamenii produsele și unde întâmpină dificultăți."
+    },
+    {
+      email: "alumnus-daria-logica@example.test",
+      first_name: "Daria",
+      last_name: "Logică",
+      job: "Ingineră de date la Setul Fictiv",
+      edition_years: [2018, 2022, 2024],
+      description: "Biografie fictivă: pregătirea rezultatelor pentru prezentare mi-a arătat cât de valoroase sunt datele clare și explicațiile bine structurate."
+    },
+    {
+      email: "alumnus-matei-verde@example.test",
+      first_name: "Matei",
+      last_name: "Verde",
+      job: "Fondator al Eco Atelier Demo",
+      edition_years: [2020],
+      description: "Biografie fictivă: concursul mi-a dat încrederea să transform un experiment despre mediu într-un proiect construit împreună cu o echipă."
+    },
+    {
+      email: "alumnus-sabina-sistem@example.test",
+      first_name: "Sabina",
+      last_name: "Sistem",
+      job: "Mentor tehnic la Clubul Exemplu",
+      edition_years: [2018, 2020, 2022, 2024],
+      description: "Biografie fictivă: după mai multe ediții demonstrative, am continuat să ajut echipe tinere să își testeze ideile și să învețe din iterații."
     }
   ]
 
@@ -542,7 +611,8 @@ if seed_demo_data
     user = seed_user.call(
       email: data[:email],
       first_name: data[:first_name],
-      last_name: data[:last_name]
+      last_name: data[:last_name],
+      job: data[:job]
     )
     user.roles << alumni_role unless user.roles.include?(alumni_role)
 
