@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_190000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_200000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_190000) do
     t.string   "title_en"
     t.text     "body",                      null: false
     t.text     "body_en"
+    t.string   "document"
+    t.string   "document_en"
     t.boolean  "active",    default: true,  null: false
     t.datetime "created_at",                 null: false
     t.datetime "updated_at",                 null: false

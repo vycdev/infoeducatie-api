@@ -74,6 +74,7 @@ RSpec.describe "RailsAdmin editor", type: :request do
       expect(response).to have_http_status(:ok)
       expect(response.body.scan("<trix-editor").length).to eq(2)
       expect(response.body).to include('/internal/admin/editor_images')
+      expect(response.body.scan('accept="application/pdf"').length).to eq(2)
     end
   end
 

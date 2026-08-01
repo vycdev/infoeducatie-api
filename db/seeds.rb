@@ -1101,7 +1101,7 @@ if seed_demo_data
   # reuse the same editor and media library without coupling dated posts to
   # navigation-critical content.
   content_page_directory = Rails.root.join("db", "seed_assets", "content_pages")
-  seed_content_page = lambda do |slug:, title:, title_en:|
+  seed_content_page = lambda do |slug:, title:, title_en:, document_filename: nil|
     page = ContentPage.find_or_initialize_by(slug: slug)
     page.assign_attributes(
       title: title,
@@ -1111,6 +1111,13 @@ if seed_demo_data
       active: true
     )
     page.save!
+
+    if document_filename && !page.document?
+      File.open(content_page_directory.join(slug, document_filename)) do |file|
+        page.document = file
+        page.save!
+      end
+    end
   end
 
   seed_content_page.call(
@@ -1122,6 +1129,12 @@ if seed_demo_data
     slug: "contact",
     title: "Contact",
     title_en: "Contact"
+  )
+  seed_content_page.call(
+    slug: "program",
+    title: "Program InfoEducație",
+    title_en: "InfoEducation Schedule",
+    document_filename: "program-2026.pdf"
   )
 
   blog_post_directory = Rails.root.join("db", "seed_assets", "blog_posts")

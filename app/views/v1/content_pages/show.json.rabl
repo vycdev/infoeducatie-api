@@ -9,3 +9,7 @@ end
 node(:body) do |page|
   page.localized_body(@content_locale)
 end
+
+node(:document_url) do |page|
+  page.localized_document_url(@content_locale)
+end

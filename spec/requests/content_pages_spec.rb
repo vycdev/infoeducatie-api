@@ -17,7 +17,8 @@ RSpec.describe "Content pages API", type: :request do
     expect(JSON.parse(response.body)).to include(
       "slug" => "about",
       "title" => "About InfoEducație",
-      "body" => "<p>English content.</p>"
+      "body" => "<p>English content.</p>",
+      "document_url" => nil
     )
   end
 

@@ -1,4 +1,7 @@
 class ContentPage < ActiveRecord::Base
+  mount_uploader :document, ContentPageDocumentUploader
+  mount_uploader :document_en, ContentPageDocumentUploader
+
   validates :slug,
     presence: true,
     uniqueness: true,
@@ -21,6 +24,14 @@ class ContentPage < ActiveRecord::Base
     english_locale?(locale) ? body_en.presence || body : body
   end
 
+  def localized_document_url(locale)
+    if english_locale?(locale) && document_en?
+      document_en.url
+    elsif document?
+      document.url
+    end
+  end
+
   def to_s
     title
   end
@@ -29,6 +40,9 @@ class ContentPage < ActiveRecord::Base
     label "Content page"
     label_plural "Content pages"
     navigation_label "Community"
+
+    configure :document, :carrierwave
+    configure :document_en, :carrierwave
 
     list do
       field :title
@@ -57,6 +71,16 @@ class ContentPage < ActiveRecord::Base
         partial :form_rich_text_editor
         label "Body (English)"
         help "Optional formatted English page content."
+      end
+      field :document do
+        label "Document (Romanian)"
+        html_attributes accept: "application/pdf"
+        help "Optional. PDF, up to 10 MB."
+      end
+      field :document_en do
+        label "Document (English)"
+        html_attributes accept: "application/pdf"
+        help "Optional. The Romanian document is used when this is blank. PDF, up to 10 MB."
       end
       field :active do
         help "Inactive pages remain in the dashboard but are hidden from the public API."
