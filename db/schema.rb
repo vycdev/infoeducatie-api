@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_150000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_160000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,6 +132,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_150000) do
     t.string   "talks_forum_category"
     t.boolean  "show_results"
   end
+
+  create_table "judging_criteria", force: :cascade do |t|
+    t.string   "title",                     null: false
+    t.string   "title_en",                  null: false
+    t.string   "document",                  null: false
+    t.integer  "position",  default: 0,     null: false
+    t.boolean  "active",    default: true,  null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+  end
+
+  add_index "judging_criteria", ["active", "position"], name: "index_judging_criteria_on_active_and_position", using: :btree
+  add_index "judging_criteria", ["position"], name: "index_judging_criteria_on_position", using: :btree
+  add_index "judging_criteria", ["title"], name: "index_judging_criteria_on_title", unique: true, using: :btree
 
   create_table "jury_categories", force: :cascade do |t|
     t.string   "title",                     null: false

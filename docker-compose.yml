@@ -28,6 +28,7 @@ services:
       RACK_ENV: production
       RAILS_ASSUME_SSL: "false"
       RAILS_FORCE_SSL: "false"
+      RAILS_SERVE_STATIC_FILES: "true"
       SEED_DEMO_DATA: "true"
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:-local-compose-secret-key-base}
       SESSION_COOKIE_SECURE: "false"

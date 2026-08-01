@@ -1031,4 +1031,36 @@ if seed_demo_data
       end
     end
   end
+
+  # Exact judging-criteria PDFs currently published by data.infoeducatie.ro.
+  judging_criteria_data = JSON.parse(
+    Rails.root.join("db", "seed_assets", "judging_criteria", "data.json").read,
+    symbolize_names: true
+  )
+  judging_criteria_directory = Rails.root.join(
+    "db",
+    "seed_assets",
+    "judging_criteria",
+    "documents"
+  )
+
+  judging_criteria_data.each do |criterion_data|
+    criterion = JudgingCriterion.find_or_initialize_by(title: criterion_data[:title])
+    criterion.assign_attributes(
+      title_en: criterion_data[:title_en],
+      position: criterion_data[:position],
+      active: true
+    )
+
+    if criterion.document?
+      criterion.save!
+    else
+      File.open(
+        judging_criteria_directory.join(criterion_data[:document_filename])
+      ) do |file|
+        criterion.document = file
+        criterion.save!
+      end
+    end
+  end
 end
