@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_29_090000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_130000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_29_090000) do
     t.integer  "user_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
+    t.text     "description_en"
   end
 
   add_index "alumni", ["user_id"], name: "index_alumni_on_user_id", unique: true, using: :btree
@@ -140,6 +141,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_29_090000) do
     t.datetime "updated_at",                 null: false
     t.integer  "edition_id"
     t.text     "short"
+    t.string   "title_en"
+    t.text     "body_en"
   end
 
   create_table "projects", force: :cascade do |t|
@@ -316,6 +319,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_29_090000) do
     t.integer  "edition_id"
     t.integer  "topic_id"
     t.integer  "comments_count", default: 0, null: false
+    t.string   "title_en"
+    t.text     "description_en"
   end
 
   create_table "teachers", force: :cascade do |t|
@@ -357,6 +362,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_29_090000) do
     t.integer  "registration_step_number", default: 1
     t.string   "job"
     t.boolean  "newsletter"
+    t.string   "job_en"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

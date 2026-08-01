@@ -52,9 +52,14 @@ seed_demo_data = ActiveModel::Type::Boolean.new.cast(
 if seed_demo_data
   demo_password = ENV.fetch("DEMO_USER_PASSWORD", "local-infoedu-demo-2026")
 
-  seed_user = lambda do |email:, first_name:, last_name:, job: nil|
+  seed_user = lambda do |email:, first_name:, last_name:, job: nil, job_en: nil|
     user = User.find_or_initialize_by(email: email)
-    user.assign_attributes(first_name: first_name, last_name: last_name, job: job)
+    user.assign_attributes(
+      first_name: first_name,
+      last_name: last_name,
+      job: job,
+      job_en: job_en
+    )
 
     if user.new_record?
       user.password = demo_password
@@ -474,19 +479,30 @@ if seed_demo_data
   news_articles = [
     {
       title: "Ediția demonstrativă 2026 este pregătită",
+      title_en: "The 2026 demo edition is ready",
       pinned: true,
-      body: <<~HTML
+      body: <<~HTML,
         <p><strong>Acesta este un articol fictiv folosit pentru dezvoltarea interfeței locale.</strong></p>
         <p>Motto demonstrativ: <em>Construim idei, testăm viitorul!</em></p>
         <p>Conținutul, datele și locurile din această bază de date sunt inventate.</p>
       HTML
+      body_en: <<~HTML
+        <p><strong>This is a fictional article used to develop and test the local interface.</strong></p>
+        <p>Demo motto: <em>We build ideas and test the future!</em></p>
+        <p>All content, dates, and locations in this database are invented.</p>
+      HTML
     },
     {
       title: "Rezultatele demonstrative sunt disponibile",
+      title_en: "The demo results are available",
       pinned: false,
-      body: <<~HTML
+      body: <<~HTML,
         <p>Rezultatele fictive pentru ediția demonstrativă 2026 sunt acum vizibile în interfața locală.</p>
         <p>Toate numele, proiectele și punctajele afișate sunt date de test inventate.</p>
+      HTML
+      body_en: <<~HTML
+        <p>The fictional results for the 2026 demo edition are now visible in the local interface.</p>
+        <p>Every displayed name, project, and score is invented test data.</p>
       HTML
     }
   ]
@@ -496,7 +512,12 @@ if seed_demo_data
       title: data[:title],
       edition: current_edition
     )
-    article.assign_attributes(body: data[:body], pinned: data[:pinned])
+    article.assign_attributes(
+      title_en: data[:title_en],
+      body: data[:body],
+      body_en: data[:body_en],
+      pinned: data[:pinned]
+    )
     article.save!
   end
 
@@ -505,49 +526,57 @@ if seed_demo_data
       key: :ana_arhitect,
       first_name: "Ana",
       last_name: "Arhitect",
-      job: "Ingineră software la Fabrica Demo"
+      job: "Ingineră software la Fabrica Demo",
+      job_en: "Software engineer at Demo Factory"
     },
     {
       key: :vlad_senzor,
       first_name: "Vlad",
       last_name: "Senzor",
-      job: "Inginer robotică la Laboratorul Fictiv"
+      job: "Inginer robotică la Laboratorul Fictiv",
+      job_en: "Robotics engineer at Fictional Lab"
     },
     {
       key: :ioana_cadru,
       first_name: "Ioana",
       last_name: "Cadru",
-      job: "Designer multimedia la Studio Exemplu"
+      job: "Designer multimedia la Studio Exemplu",
+      job_en: "Multimedia designer at Example Studio"
     },
     {
       key: :mihai_date,
       first_name: "Mihai",
       last_name: "Date",
-      job: "Cercetător AI la Institutul Local"
+      job: "Cercetător AI la Institutul Local",
+      job_en: "AI researcher at Local Institute"
     },
     {
       key: :daria_produs,
       first_name: "Daria",
       last_name: "Produs",
-      job: "Product manager la Atelierul Digital"
+      job: "Product manager la Atelierul Digital",
+      job_en: "Product manager at Digital Workshop"
     },
     {
       key: :radu_siguranta,
       first_name: "Radu",
       last_name: "Siguranță",
-      job: "Inginer de securitate la Scut Demo"
+      job: "Inginer de securitate la Scut Demo",
+      job_en: "Security engineer at Demo Shield"
     },
     {
       key: :elena_comunitate,
       first_name: "Elena",
       last_name: "Comunitate",
-      job: "Coordonatoare la Clubul Exemplu"
+      job: "Coordonatoare la Clubul Exemplu",
+      job_en: "Coordinator at Example Club"
     },
     {
       key: :matei_prezentare,
       first_name: "Matei",
       last_name: "Prezentare",
-      job: "Trainer tehnic independent"
+      job: "Trainer tehnic independent",
+      job_en: "Independent technical trainer"
     }
   ]
 
@@ -556,7 +585,8 @@ if seed_demo_data
       email: "speaker-#{data[:key]}@example.test",
       first_name: data[:first_name],
       last_name: data[:last_name],
-      job: data[:job]
+      job: data[:job],
+      job_en: data[:job_en]
     )
     user.roles << speaker_role unless user.roles.include?(speaker_role)
     [data[:key], user]
@@ -565,33 +595,45 @@ if seed_demo_data
   talk_data = [
     {
       title: "De la idee la un prototip care poate fi testat",
+      title_en: "From an idea to a testable prototype",
       speaker_keys: [:ana_arhitect],
-      description: "Seminar fictiv despre alegerea unei probleme clare, construirea primei versiuni și folosirea feedbackului pentru iterații rapide."
+      description: "Seminar fictiv despre alegerea unei probleme clare, construirea primei versiuni și folosirea feedbackului pentru iterații rapide.",
+      description_en: "A fictional talk about choosing a clear problem, building the first version, and using feedback for rapid iterations."
     },
     {
       title: "Roboți mici, experimente mari",
+      title_en: "Small robots, big experiments",
       speaker_keys: [:vlad_senzor],
-      description: "Atelier fictiv despre senzori, motoare și teste simple care ajută o echipă să descopere erorile înainte de demonstrația finală."
+      description: "Atelier fictiv despre senzori, motoare și teste simple care ajută o echipă să descopere erorile înainte de demonstrația finală.",
+      description_en: "A fictional workshop about sensors, motors, and simple tests that help a team find errors before the final demonstration."
     },
     {
       title: "Poveste, sunet și interacțiune",
+      title_en: "Story, sound, and interaction",
       speaker_keys: [:ioana_cadru, :matei_prezentare],
-      description: "Discuție fictivă despre cum se combină imaginile, sunetul și ritmul unei prezentări pentru un proiect multimedia memorabil."
+      description: "Discuție fictivă despre cum se combină imaginile, sunetul și ritmul unei prezentări pentru un proiect multimedia memorabil.",
+      description_en: "A fictional discussion about combining visuals, sound, and presentation rhythm to create a memorable multimedia project."
     },
     {
       title: "Inteligență artificială explicată prin date",
+      title_en: "Artificial intelligence explained through data",
       speaker_keys: [:mihai_date],
-      description: "Introducere fictivă în seturi de date, evaluarea rezultatelor și limitele unui model, cu exemple potrivite pentru proiecte școlare."
+      description: "Introducere fictivă în seturi de date, evaluarea rezultatelor și limitele unui model, cu exemple potrivite pentru proiecte școlare.",
+      description_en: "A fictional introduction to datasets, result evaluation, and model limitations, with examples suitable for school projects."
     },
     {
       title: "Construiește pentru oameni, nu doar pentru demo",
+      title_en: "Build for people, not only for the demo",
       speaker_keys: [:daria_produs, :elena_comunitate],
-      description: "Seminar fictiv despre interviuri scurte, accesibilitate și prioritizarea funcționalităților care rezolvă o nevoie reală."
+      description: "Seminar fictiv despre interviuri scurte, accesibilitate și prioritizarea funcționalităților care rezolvă o nevoie reală.",
+      description_en: "A fictional talk about short interviews, accessibility, and prioritizing features that solve a real need."
     },
     {
       title: "Securitate practică pentru proiecte web",
+      title_en: "Practical security for web projects",
       speaker_keys: [:radu_siguranta],
-      description: "Sesiune fictivă despre parole, date personale, permisiuni și verificările de bază care fac o aplicație demonstrativă mai sigură."
+      description: "Sesiune fictivă despre parole, date personale, permisiuni și verificările de bază care fac o aplicație demonstrativă mai sigură.",
+      description_en: "A fictional session about passwords, personal data, permissions, and basic checks that make a demo application safer."
     }
   ]
 
@@ -601,7 +643,9 @@ if seed_demo_data
       edition: current_edition
     )
     talk.assign_attributes(
+      title_en: data[:title_en],
       description: data[:description],
+      description_en: data[:description_en],
       users: data[:speaker_keys].map { |key| speakers.fetch(key) }
     )
     talk.save!
@@ -638,80 +682,100 @@ if seed_demo_data
       first_name: "Alex",
       last_name: "Demo",
       job: "Inginer software la Atelierul Digital",
+      job_en: "Software engineer at Digital Workshop",
       edition_years: [2022, 2024],
-      description: "Biografie fictivă: edițiile demonstrative m-au încurajat să experimentez, să colaborez și să îmi prezint ideile mai clar."
+      description: "Biografie fictivă: edițiile demonstrative m-au încurajat să experimentez, să colaborez și să îmi prezint ideile mai clar.",
+      description_en: "Fictional biography: the demo editions encouraged me to experiment, collaborate, and present my ideas more clearly."
     },
     {
       email: "alumnus-mara-exemplu@example.test",
       first_name: "Mara",
       last_name: "Exemplu",
       job: "Designer de produs la Studio Mostră",
+      job_en: "Product designer at Sample Studio",
       edition_years: [2024],
-      description: "Biografie fictivă: experiența demo mi-a arătat cât de mult contează feedbackul, lucrul în echipă și o prezentare bine repetată."
+      description: "Biografie fictivă: experiența demo mi-a arătat cât de mult contează feedbackul, lucrul în echipă și o prezentare bine repetată.",
+      description_en: "Fictional biography: the demo experience showed me how much feedback, teamwork, and a well-rehearsed presentation matter."
     },
     {
       email: "alumnus-vlad-prototip@example.test",
       first_name: "Vlad",
       last_name: "Prototip",
       job: "Inginer robotică la Laboratorul Local",
+      job_en: "Robotics engineer at Local Lab",
       edition_years: [2018, 2020],
-      description: "Biografie fictivă: primele prototipuri construite pentru concurs mi-au transformat curiozitatea pentru senzori într-o pasiune pentru robotică."
+      description: "Biografie fictivă: primele prototipuri construite pentru concurs mi-au transformat curiozitatea pentru senzori într-o pasiune pentru robotică.",
+      description_en: "Fictional biography: the first prototypes I built for the competition turned my curiosity about sensors into a passion for robotics."
     },
     {
       email: "alumnus-ioana-pixel@example.test",
       first_name: "Ioana",
       last_name: "Pixel",
       job: "Artistă tehnică la Cadru Fictiv",
+      job_en: "Technical artist at Fictional Frame",
       edition_years: [2020, 2022],
-      description: "Biografie fictivă: proiectele multimedia m-au învățat să combin povestea, ilustrația și codul într-o experiență coerentă."
+      description: "Biografie fictivă: proiectele multimedia m-au învățat să combin povestea, ilustrația și codul într-o experiență coerentă.",
+      description_en: "Fictional biography: multimedia projects taught me to combine storytelling, illustration, and code into a coherent experience."
     },
     {
       email: "alumnus-radu-circuit@example.test",
       first_name: "Radu",
       last_name: "Circuit",
       job: "Dezvoltator embedded la Placa Demo",
+      job_en: "Embedded developer at Demo Board",
       edition_years: [2018],
-      description: "Biografie fictivă: feedbackul primit în tabără m-a ajutat să simplific ideile tehnice și să construiesc prototipuri mai ușor de testat."
+      description: "Biografie fictivă: feedbackul primit în tabără m-a ajutat să simplific ideile tehnice și să construiesc prototipuri mai ușor de testat.",
+      description_en: "Fictional biography: feedback from the camp helped me simplify technical ideas and build prototypes that were easier to test."
     },
     {
       email: "alumnus-elena-retea@example.test",
       first_name: "Elena",
       last_name: "Rețea",
       job: "Ingineră platformă la Norul Exemplu",
+      job_en: "Platform engineer at Example Cloud",
       edition_years: [2020, 2024],
-      description: "Biografie fictivă: colaborarea cu participanți din alte județe mi-a deschis drumul către sisteme distribuite și comunități tehnice."
+      description: "Biografie fictivă: colaborarea cu participanți din alte județe mi-a deschis drumul către sisteme distribuite și comunități tehnice.",
+      description_en: "Fictional biography: collaborating with participants from other counties led me toward distributed systems and technical communities."
     },
     {
       email: "alumnus-tudor-harta@example.test",
       first_name: "Tudor",
       last_name: "Hartă",
       job: "Cercetător UX la Busola Digitală",
+      job_en: "UX researcher at Digital Compass",
       edition_years: [2022],
-      description: "Biografie fictivă: discuțiile cu juriul m-au făcut să observ mai atent cum folosesc oamenii produsele și unde întâmpină dificultăți."
+      description: "Biografie fictivă: discuțiile cu juriul m-au făcut să observ mai atent cum folosesc oamenii produsele și unde întâmpină dificultăți.",
+      description_en: "Fictional biography: discussions with the jury taught me to observe more carefully how people use products and where they struggle."
     },
     {
       email: "alumnus-daria-logica@example.test",
       first_name: "Daria",
       last_name: "Logică",
       job: "Ingineră de date la Setul Fictiv",
+      job_en: "Data engineer at Fictional Dataset",
       edition_years: [2018, 2022, 2024],
-      description: "Biografie fictivă: pregătirea rezultatelor pentru prezentare mi-a arătat cât de valoroase sunt datele clare și explicațiile bine structurate."
+      description: "Biografie fictivă: pregătirea rezultatelor pentru prezentare mi-a arătat cât de valoroase sunt datele clare și explicațiile bine structurate.",
+      description_en: "Fictional biography: preparing results for presentation showed me the value of clear data and well-structured explanations."
     },
     {
       email: "alumnus-matei-verde@example.test",
       first_name: "Matei",
       last_name: "Verde",
       job: "Fondator al Eco Atelier Demo",
+      job_en: "Founder of Demo Eco Workshop",
       edition_years: [2020],
-      description: "Biografie fictivă: concursul mi-a dat încrederea să transform un experiment despre mediu într-un proiect construit împreună cu o echipă."
+      description: "Biografie fictivă: concursul mi-a dat încrederea să transform un experiment despre mediu într-un proiect construit împreună cu o echipă.",
+      description_en: "Fictional biography: the competition gave me the confidence to turn an environmental experiment into a project built with a team."
     },
     {
       email: "alumnus-sabina-sistem@example.test",
       first_name: "Sabina",
       last_name: "Sistem",
       job: "Mentor tehnic la Clubul Exemplu",
+      job_en: "Technical mentor at Example Club",
       edition_years: [2018, 2020, 2022, 2024],
-      description: "Biografie fictivă: după mai multe ediții demonstrative, am continuat să ajut echipe tinere să își testeze ideile și să învețe din iterații."
+      description: "Biografie fictivă: după mai multe ediții demonstrative, am continuat să ajut echipe tinere să își testeze ideile și să învețe din iterații.",
+      description_en: "Fictional biography: after several demo editions, I continued helping young teams test their ideas and learn through iteration."
     }
   ]
 
@@ -720,12 +784,14 @@ if seed_demo_data
       email: data[:email],
       first_name: data[:first_name],
       last_name: data[:last_name],
-      job: data[:job]
+      job: data[:job],
+      job_en: data[:job_en]
     )
     user.roles << alumni_role unless user.roles.include?(alumni_role)
 
     alumnus = Alumnus.find_or_initialize_by(user: user)
     alumnus.description = data[:description]
+    alumnus.description_en = data[:description_en]
     alumnus.editions = data[:edition_years].map do |year|
       historical_editions.fetch(year)
     end
