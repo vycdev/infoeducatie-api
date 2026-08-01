@@ -27,6 +27,12 @@ Start the application and PostgreSQL with:
 docker compose up --build
 ```
 
+The local Compose setup seeds representative public data from the 2026 edition:
+first-place projects and participants from every category, published results,
+news and alumni. Required private contestant fields use fake local-only values.
+Set `SEED_DEMO_DATA=false` to start with only the core roles, categories and
+current edition.
+
 Successful `master` builds are published to GitHub Container Registry.
 
 Service-to-service exports use scoped, expiring API credentials managed from

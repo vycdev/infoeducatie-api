@@ -11,7 +11,7 @@ services:
       timeout: 5s
       retries: 10
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql
 
   web:
     build: .
@@ -23,8 +23,9 @@ services:
       RAILS_ENV: production
       RACK_ENV: production
       RAILS_FORCE_SSL: "false"
+      SEED_DEMO_DATA: "true"
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:-local-compose-secret-key-base}
-    command: sh -c "bundle exec rails db:prepare && bundle exec puma -C config/puma.rb"
+    command: sh -c "bundle exec rails db:prepare && bundle exec rails db:seed && bundle exec puma -C config/puma.rb"
     depends_on:
       db:
         condition: service_healthy
