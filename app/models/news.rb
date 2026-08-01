@@ -15,6 +15,8 @@ class News < ActiveRecord::Base
     self.short = ActionController::Base.helpers.strip_tags(self.body)[0..125]
   end
 
+  before_save :unpin_other_news_in_edition, if: :pin_scope_changed?
+
   def localized_title(locale)
     english_locale?(locale) ? title_en.presence || title : title
   end
@@ -66,5 +68,15 @@ class News < ActiveRecord::Base
 
   def english_locale?(locale)
     locale.to_s.downcase.start_with?("en")
+  end
+
+  def pin_scope_changed?
+    pinned? && (will_save_change_to_pinned? || will_save_change_to_edition_id?)
+  end
+
+  def unpin_other_news_in_edition
+    News.where(edition_id: edition_id, pinned: true)
+        .where.not(id: id)
+        .update_all(pinned: false)
   end
 end
