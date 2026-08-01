@@ -17,7 +17,8 @@ module V1
         is_logged_in: false,
         is_registration_open: is_registration_open,
         edition: Edition.get_current,
-        last_edition_with_results: Edition.get_last_with_results
+        last_edition_with_results: Edition.get_last_with_results,
+        site_links: SiteLink.active.order(:slug).pluck(:slug, :url).to_h
       }
 
       unless current_user.nil?

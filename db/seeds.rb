@@ -1123,4 +1123,10 @@ if seed_demo_data
     title: "Contact",
     title_en: "Contact"
   )
+
+  discord_link = SiteLink.find_or_initialize_by(slug: "discord")
+  discord_link.update!(
+    url: "https://discord.gg/Ef6yav7wAs",
+    active: true
+  )
 end
