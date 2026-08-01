@@ -1,5 +1,3 @@
-require "tempfile"
-
 # Core records required by the application in every environment.
 %w[registered contestant alumni speaker teacher admin].each do |role|
   Role.find_or_create_by!(name: role)
@@ -854,149 +852,124 @@ if seed_demo_data
       website_url: "https://www.edu.ro/",
       tier: :partners,
       position: 10,
-      color: "#22543d"
+      image_filename: "edu.jpg"
     },
     {
       title: "Uniunea Profesorilor de Informatică din România",
       website_url: "https://upir.ro/",
       tier: :partners,
       position: 20,
-      color: "#22543d"
+      image_filename: "upir.png"
     },
     {
       title: "Consiliul Județean Vrancea",
       website_url: "https://cjvrancea.ro/",
       tier: :partners,
       position: 30,
-      color: "#22543d"
+      image_filename: "logoCJVrancea.jpg"
     },
     {
       title: "Universitatea Națională de Știință și Tehnologie POLITEHNICA București",
       website_url: "https://upb.ro/",
       tier: :partners,
       position: 40,
-      color: "#22543d"
+      image_filename: "upb-ro.png"
     },
     {
       title: "Universitatea de Vest din Timișoara",
       website_url: "https://uvt.ro/",
       tier: :partners,
       position: 50,
-      color: "#22543d"
+      image_filename: "uvt.png"
     },
     {
       title: "Viva Credit",
       website_url: "https://vivacredit.ro/",
       tier: :gold,
       position: 10,
-      color: "#d69e2e"
+      image_filename: "vivacredit.png"
     },
     {
       title: "Bitdefender",
       website_url: "https://bitdefender.com/",
       tier: :gold,
       position: 20,
-      color: "#d69e2e"
+      image_filename: "bitdefender.jpg"
     },
     {
       title: "Orange",
       website_url: "https://orange.ro/",
       tier: :gold,
       position: 30,
-      color: "#d69e2e"
+      image_filename: "orange.png"
     },
     {
       title: "Cisco",
       website_url: "https://cisco.com/",
       tier: :gold,
       position: 40,
-      color: "#d69e2e"
+      image_filename: "cisco.png"
     },
     {
       title: "Intuitext",
       website_url: "https://www.intuitext.ro/",
       tier: :gold,
       position: 50,
-      color: "#d69e2e"
+      image_filename: "intuitext.png"
     },
     {
       title: "Leonte",
       website_url: "https://leonte.ro/",
       tier: :silver,
       position: 10,
-      color: "#718096"
+      image_filename: "leonte.png"
     },
     {
       title: "Easyhost",
       website_url: "https://ro.easyhost.com/",
       tier: :silver,
       position: 20,
-      color: "#718096"
+      image_filename: "easyhost.png"
     },
     {
       title: "InfoBits Academy",
       website_url: "https://ebooks.infobits.ro/",
       tier: :silver,
       position: 30,
-      color: "#718096"
+      image_filename: "link_infobits_academy.jpg"
     },
     {
       title: "Sindicatul Liber din Învățământ Vrancea",
       website_url: "https://slivrancea.blogspot.com/",
       tier: :silver,
       position: 40,
-      color: "#718096"
+      image_filename: "SindicatVrancea.jpg"
     },
     {
       title: "CyberEDU",
       website_url: "https://www.cyber-edu.co/",
       tier: :silver,
       position: 50,
-      color: "#718096"
+      image_filename: "cyberedu.png"
     },
     {
       title: "Micromet",
       website_url: "https://www.micromet.ro/",
       tier: :silver,
       position: 60,
-      color: "#718096"
+      image_filename: "micromet.jpg"
     },
     {
       title: "Electric SRL",
       website_url: "https://www.electricsrl.ro/",
       tier: :silver,
       position: 70,
-      color: "#718096"
+      image_filename: "electric.png"
     }
   ]
 
-  build_sponsor_logo = lambda do |title:, color:|
-    output = Tempfile.new(["infoedu-sponsor-logo", ".png"])
-    output.close
-
-    initials = title
-      .scan(/\p{L}+/)
-      .filter_map { |word| word.first&.upcase }
-      .first(4)
-      .join
-
-    MiniMagick::Tool.new("magick") do |magick|
-      magick.size "600x240"
-      magick.xc color
-      magick.fill "rgba(255,255,255,0.20)"
-      magick.draw "circle 300,120 395,120"
-      magick.fill "white"
-      magick.font "DejaVu-Sans-Bold"
-      magick.gravity "center"
-      magick.pointsize "76"
-      magick.draw "text 0,0 '#{initials}'"
-      magick << output.path
-    end
-
-    image = MiniMagick::Image.open(output.path)
-    output.unlink
-    image
-  end
+  # These are the same official logo assets used by infoeducatie-ui.
+  sponsor_asset_directory = Rails.root.join("db", "seed_assets", "sponsors")
 
   sponsor_data.each do |data|
     sponsor = Sponsor.find_or_initialize_by(title: data[:title])
@@ -1007,16 +980,10 @@ if seed_demo_data
       active: true
     )
 
-    logo = build_sponsor_logo.call(title: data[:title], color: data[:color])
-    File.open(logo.path) do |file|
-      sponsor.image = ActionDispatch::Http::UploadedFile.new(
-        tempfile: file,
-        filename: "#{data[:title].parameterize}.png",
-        type: "image/png"
-      )
+    sponsor.remove_image! if sponsor.persisted? && sponsor.image?
+    File.open(sponsor_asset_directory.join(data[:image_filename])) do |file|
+      sponsor.image = file
       sponsor.save!
     end
-  ensure
-    logo&.destroy!
   end
 end
