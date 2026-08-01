@@ -64,7 +64,7 @@ RailsAdmin.config do |config|
       except ["ApiCredential", "RoboticsCompetition", "RoboticsTeam",
               "RoboticsTurn", "RoboticsTimeEntry", "SponsorTier", "Sponsor",
               "JuryCategory", "JuryMember", "JudgingCriterion", "PhotoAlbum",
-              "ContentPage", "SiteLink"]
+              "ContentPage"]
     end
 
     approve_project do
@@ -124,7 +124,7 @@ RailsAdmin.config do |config|
                             "Screenshot", "Edition", "News", "Ckeditor::Asset",
                             "Ckeditor::AttachmentFile", "Ckeditor::Picture",
                             "Alumnus", "SponsorTier", "Sponsor", "JuryCategory", "JuryMember",
-                            "JudgingCriterion", "PhotoAlbum", "ContentPage", "SiteLink",
+                            "JudgingCriterion", "PhotoAlbum", "ContentPage",
                             "Teacher", "RoboticsCompetition",
                             "RoboticsTeam", "RoboticsTurn",
                             "RoboticsTimeEntry"]
@@ -146,7 +146,6 @@ RailsAdmin.config do |config|
     "JudgingCriterion" => ["Community", "fas fa-file-pdf", 140],
     "PhotoAlbum" => ["Community", "fas fa-images", 150],
     "ContentPage" => ["Community", "fas fa-file-alt", 160],
-    "SiteLink" => ["Community", "fas fa-link", 170],
     "ApiCredential" => ["Security", "fas fa-key", 100],
     "Ckeditor::Asset" => ["Editor media", "fas fa-photo-video", 110],
     "Ckeditor::AttachmentFile" => ["Editor media", "fas fa-paperclip", 120],
