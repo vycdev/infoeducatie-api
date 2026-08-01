@@ -1097,31 +1097,30 @@ if seed_demo_data
     end
   end
 
-  # About-page copy currently published by infoeducatie.ro.
-  # It remains a permanent page; a future blog can reuse the same rich-text editor
-  # and media library without coupling static navigation content to dated posts.
-  about_page = ContentPage.find_or_initialize_by(slug: "about")
-  about_page.assign_attributes(
-    title: "Despre InfoEducație",
-    title_en: "About InfoEducație",
-    body: about_page.body.presence || "<p>Despre concurs.</p>",
-    body_en: about_page.body_en.presence || "<p>About the competition.</p>",
-    active: true
-  )
-  about_page.save!
-
-  about_asset_directory = Rails.root.join(
-    "db",
-    "seed_assets",
-    "content_pages",
-    "about"
-  )
-  render_about_body = lambda do |locale|
-    about_asset_directory.join("body.#{locale}.html").read
+  # Permanent pages currently published by infoeducatie.ro. A future blog can
+  # reuse the same editor and media library without coupling dated posts to
+  # navigation-critical content.
+  content_page_directory = Rails.root.join("db", "seed_assets", "content_pages")
+  seed_content_page = lambda do |slug:, title:, title_en:|
+    page = ContentPage.find_or_initialize_by(slug: slug)
+    page.assign_attributes(
+      title: title,
+      title_en: title_en,
+      body: content_page_directory.join(slug, "body.ro.html").read,
+      body_en: content_page_directory.join(slug, "body.en.html").read,
+      active: true
+    )
+    page.save!
   end
 
-  about_page.update!(
-    body: render_about_body.call(:ro),
-    body_en: render_about_body.call(:en)
+  seed_content_page.call(
+    slug: "about",
+    title: "Despre InfoEducație",
+    title_en: "About InfoEducație"
+  )
+  seed_content_page.call(
+    slug: "contact",
+    title: "Contact",
+    title_en: "Contact"
   )
 end
