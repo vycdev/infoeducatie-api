@@ -30,6 +30,7 @@ services:
       RAILS_FORCE_SSL: "false"
       SEED_DEMO_DATA: "true"
       SECRET_KEY_BASE: ${SECRET_KEY_BASE:-local-compose-secret-key-base}
+      SESSION_COOKIE_SECURE: "false"
     command: sh -c "bundle exec rails db:prepare && bundle exec rails db:seed && bundle exec puma -C config/puma.rb"
     depends_on:
       db:
