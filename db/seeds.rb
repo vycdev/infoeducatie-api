@@ -68,6 +68,7 @@ if seed_demo_data
 
   contestant_role = Role.find_by!(name: "contestant")
   alumni_role = Role.find_by!(name: "alumni")
+  speaker_role = Role.find_by!(name: "speaker")
 
   participant_data = [
     {
@@ -497,6 +498,113 @@ if seed_demo_data
     )
     article.assign_attributes(body: data[:body], pinned: data[:pinned])
     article.save!
+  end
+
+  speaker_data = [
+    {
+      key: :ana_arhitect,
+      first_name: "Ana",
+      last_name: "Arhitect",
+      job: "Ingineră software la Fabrica Demo"
+    },
+    {
+      key: :vlad_senzor,
+      first_name: "Vlad",
+      last_name: "Senzor",
+      job: "Inginer robotică la Laboratorul Fictiv"
+    },
+    {
+      key: :ioana_cadru,
+      first_name: "Ioana",
+      last_name: "Cadru",
+      job: "Designer multimedia la Studio Exemplu"
+    },
+    {
+      key: :mihai_date,
+      first_name: "Mihai",
+      last_name: "Date",
+      job: "Cercetător AI la Institutul Local"
+    },
+    {
+      key: :daria_produs,
+      first_name: "Daria",
+      last_name: "Produs",
+      job: "Product manager la Atelierul Digital"
+    },
+    {
+      key: :radu_siguranta,
+      first_name: "Radu",
+      last_name: "Siguranță",
+      job: "Inginer de securitate la Scut Demo"
+    },
+    {
+      key: :elena_comunitate,
+      first_name: "Elena",
+      last_name: "Comunitate",
+      job: "Coordonatoare la Clubul Exemplu"
+    },
+    {
+      key: :matei_prezentare,
+      first_name: "Matei",
+      last_name: "Prezentare",
+      job: "Trainer tehnic independent"
+    }
+  ]
+
+  speakers = speaker_data.to_h do |data|
+    user = seed_user.call(
+      email: "speaker-#{data[:key]}@example.test",
+      first_name: data[:first_name],
+      last_name: data[:last_name],
+      job: data[:job]
+    )
+    user.roles << speaker_role unless user.roles.include?(speaker_role)
+    [data[:key], user]
+  end
+
+  talk_data = [
+    {
+      title: "De la idee la un prototip care poate fi testat",
+      speaker_keys: [:ana_arhitect],
+      description: "Seminar fictiv despre alegerea unei probleme clare, construirea primei versiuni și folosirea feedbackului pentru iterații rapide."
+    },
+    {
+      title: "Roboți mici, experimente mari",
+      speaker_keys: [:vlad_senzor],
+      description: "Atelier fictiv despre senzori, motoare și teste simple care ajută o echipă să descopere erorile înainte de demonstrația finală."
+    },
+    {
+      title: "Poveste, sunet și interacțiune",
+      speaker_keys: [:ioana_cadru, :matei_prezentare],
+      description: "Discuție fictivă despre cum se combină imaginile, sunetul și ritmul unei prezentări pentru un proiect multimedia memorabil."
+    },
+    {
+      title: "Inteligență artificială explicată prin date",
+      speaker_keys: [:mihai_date],
+      description: "Introducere fictivă în seturi de date, evaluarea rezultatelor și limitele unui model, cu exemple potrivite pentru proiecte școlare."
+    },
+    {
+      title: "Construiește pentru oameni, nu doar pentru demo",
+      speaker_keys: [:daria_produs, :elena_comunitate],
+      description: "Seminar fictiv despre interviuri scurte, accesibilitate și prioritizarea funcționalităților care rezolvă o nevoie reală."
+    },
+    {
+      title: "Securitate practică pentru proiecte web",
+      speaker_keys: [:radu_siguranta],
+      description: "Sesiune fictivă despre parole, date personale, permisiuni și verificările de bază care fac o aplicație demonstrativă mai sigură."
+    }
+  ]
+
+  talk_data.each do |data|
+    talk = Talk.find_or_initialize_by(
+      title: data[:title],
+      edition: current_edition
+    )
+    talk.assign_attributes(
+      description: data[:description],
+      users: data[:speaker_keys].map { |key| speakers.fetch(key) }
+    )
+    talk.save!
   end
 
   historical_edition_names = {
