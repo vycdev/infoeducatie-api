@@ -1063,4 +1063,37 @@ if seed_demo_data
       end
     end
   end
+
+  # Photo albums, links, and cover images currently published by infoeducatie.ro.
+  photo_album_data = JSON.parse(
+    Rails.root.join("db", "seed_assets", "photo_albums", "data.json").read,
+    symbolize_names: true
+  )
+  photo_album_cover_directory = Rails.root.join(
+    "db",
+    "seed_assets",
+    "photo_albums",
+    "covers"
+  )
+
+  photo_album_data.each do |album_data|
+    album = PhotoAlbum.find_or_initialize_by(title: album_data[:title])
+    album.assign_attributes(
+      title_en: album_data[:title_en],
+      external_url: album_data[:external_url],
+      position: album_data[:position],
+      active: true
+    )
+
+    if album.cover_image?
+      album.save!
+    else
+      File.open(
+        photo_album_cover_directory.join(album_data[:cover_filename])
+      ) do |file|
+        album.cover_image = file
+        album.save!
+      end
+    end
+  end
 end

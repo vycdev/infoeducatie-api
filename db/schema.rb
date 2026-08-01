@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_01_160000) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_170000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -188,6 +188,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_01_160000) do
     t.string   "title_en"
     t.text     "body_en"
   end
+
+  create_table "photo_albums", force: :cascade do |t|
+    t.string   "title",                      null: false
+    t.string   "title_en"
+    t.string   "external_url",               null: false
+    t.string   "cover_image",                null: false
+    t.integer  "position",    default: 0,    null: false
+    t.boolean  "active",      default: true, null: false
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+  end
+
+  add_index "photo_albums", ["active", "position"], name: "index_photo_albums_on_active_and_position", using: :btree
+  add_index "photo_albums", ["title"], name: "index_photo_albums_on_title", using: :btree
 
   create_table "projects", force: :cascade do |t|
     t.string   "title"

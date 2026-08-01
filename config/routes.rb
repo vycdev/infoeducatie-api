@@ -31,6 +31,7 @@ Rails.application.routes.draw do
     resources :sponsors, only: [:index]
     resources :jury, only: [:index]
     resources :judging_criteria, only: [:index]
+    resources :photo_albums, only: [:index]
     resources :editions, only: [:index]
 
     resources :contestants, only: [:index, :show, :create] do
